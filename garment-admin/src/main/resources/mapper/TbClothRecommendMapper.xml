@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.garment.web.mapper.TbClothRecommendMapper">
+
+
+    <resultMap type="TbClothRecommend" id="TbClothRecommendResult">
+        <result property="id"    column="id"    />
+        <result property="clothId"    column="cloth_id"    />
+        <result property="clothSize"    column="cloth_size"    />
+        <result property="bust"    column="bust"    />
+        <result property="clothLength"    column="cloth_length"    />
+        <result property="waist"    column="waist"    />
+        <result property="skirt"    column="skirt"    />
+        <result property="recommended"    column="recommended"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbClothRecommendVo">
+        select id, cloth_id, cloth_size, bust, cloth_length, waist, skirt, recommended, create_time, update_time from tb_cloth_recommend
+    </sql>
+
+    <select id="selectTbClothRecommendList" parameterType="TbClothRecommend" resultMap="TbClothRecommendResult">
+        <include refid="selectTbClothRecommendVo"/>
+        <where>
+            <if test="clothId != null "> and cloth_id = #{clothId}</if>
+            <if test="clothSize != null  and clothSize != ''"> and cloth_size = #{clothSize}</if>
+            <if test="bust != null  and bust != ''"> and bust = #{bust}</if>
+            <if test="clothLength != null  and clothLength != ''"> and cloth_length = #{clothLength}</if>
+            <if test="waist != null  and waist != ''"> and waist = #{waist}</if>
+            <if test="skirt != null  and skirt != ''"> and skirt = #{skirt}</if>
+            <if test="recommended != null  and recommended != ''"> and recommended = #{recommended}</if>
+        </where>
+    </select>
+
+    <select id="selectTbClothRecommendById" parameterType="Long" resultMap="TbClothRecommendResult">
+        <include refid="selectTbClothRecommendVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTbClothRecommend" parameterType="TbClothRecommend" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_cloth_recommend
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clothId != null">cloth_id,</if>
+            <if test="clothSize != null">cloth_size,</if>
+            <if test="bust != null">bust,</if>
+            <if test="clothLength != null">cloth_length,</if>
+            <if test="waist != null">waist,</if>
+            <if test="skirt != null">skirt,</if>
+            <if test="recommended != null">recommended,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clothId != null">#{clothId},</if>
+            <if test="clothSize != null">#{clothSize},</if>
+            <if test="bust != null">#{bust},</if>
+            <if test="clothLength != null">#{clothLength},</if>
+            <if test="waist != null">#{waist},</if>
+            <if test="skirt != null">#{skirt},</if>
+            <if test="recommended != null">#{recommended},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbClothRecommend" parameterType="TbClothRecommend">
+        update tb_cloth_recommend
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clothId != null">cloth_id = #{clothId},</if>
+            <if test="clothSize != null">cloth_size = #{clothSize},</if>
+            <if test="bust != null">bust = #{bust},</if>
+            <if test="clothLength != null">cloth_length = #{clothLength},</if>
+            <if test="waist != null">waist = #{waist},</if>
+            <if test="skirt != null">skirt = #{skirt},</if>
+            <if test="recommended != null">recommended = #{recommended},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbClothRecommendById" parameterType="Long">
+        delete from tb_cloth_recommend where id = #{id}
+    </delete>
+
+    <delete id="deleteTbClothRecommendByIds" parameterType="String">
+        delete from tb_cloth_recommend where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.garment.web.mapper.TbCulturalMapper">
+
+    <resultMap type="TbCultural" id="TbCulturalResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="context"    column="context"    />
+        <result property="imgOne"    column="img_one"    />
+        <result property="imgTwo"    column="img_two"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbCulturalVo">
+        select id, name,img_one,img_two, context,create_time, update_time from tb_cultural
+    </sql>
+
+    <select id="selectTbCulturalList" parameterType="TbCultural" resultMap="TbCulturalResult">
+        <include refid="selectTbCulturalVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="context != null  and context != ''"> and context like concat('%', #{context}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectTbCulturalById" parameterType="Long" resultMap="TbCulturalResult">
+        <include refid="selectTbCulturalVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTbCultural" parameterType="TbCultural" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_cultural
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="context != null">context,</if>
+            <if test="imgOne != null">img_one,</if>
+            <if test="imgTwo != null">img_two,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="context != null">#{context},</if>
+            <if test="imgOne != null">#{imgOne},</if>
+            <if test="imgTwo != null">#{imgTwo},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbCultural" parameterType="TbCultural">
+        update tb_cultural
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="context != null">context = #{context},</if>
+            <if test="imgOne != null">img_one = #{imgOne},</if>
+            <if test="imgTwo != null">img_two = #{imgTwo},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbCulturalById" parameterType="Long">
+        delete from tb_cultural where id = #{id}
+    </delete>
+
+    <delete id="deleteTbCulturalByIds" parameterType="String">
+        delete from tb_cultural where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

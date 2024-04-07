@@ -1,0 +1,174 @@
+# 环境配置
+server:
+    # 服务器的HTTP端口，默认为8080
+    port: 8080
+# 项目相关配置
+garment:
+    # 名称
+    name: garment
+    # 版本
+    version: 1.0.0
+    # 版权年份
+    copyrightYear: 2022
+    # 实例演示开关
+    demoEnabled: true
+    # 文件路径 示例（ Windows配置D:/unamana/uploadPath，Linux配置 /root/unamano/uploadPath, mac: /Users/pierreluo/IdeaProjects/RuoYi-Vue-v3.8.3/doc）
+    profile: D:/garment/uploadPath
+    # 获取ip地址开关
+    addressEnabled: false
+    # 验证码类型 math 数组计算 char 字符验证
+    captchaType: math
+# token配置
+token:
+    # 令牌自定义标识
+    header: Authorization
+    # 令牌密钥
+    secret: abcdefghijklmnopqrstuvwxyz
+    # 令牌有效期（默认30分钟）
+    expireTime: 30
+# 数据源配置
+# 数据源配置
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.cj.jdbc.Driver
+        druid:
+            # 主库数据源
+            master:
+                url: jdbc:mysql://localhost:3306/garment?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                username: root
+                password: 123456ld
+            # 从库数据源
+            slave:
+                # 从数据源开关/默认关闭
+                enabled: false
+                url:
+                username:
+                password:
+            # 初始连接数
+            initialSize: 5
+            # 最小连接池数量
+            minIdle: 10
+            # 最大连接池数量
+            maxActive: 20
+            # 配置获取连接等待超时的时间
+            maxWait: 60000
+            # 配置连接超时时间
+            connectTimeout: 30000
+            # 配置网络超时时间
+            socketTimeout: 60000
+            # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+            timeBetweenEvictionRunsMillis: 60000
+            # 配置一个连接在池中最小生存的时间，单位是毫秒
+            minEvictableIdleTimeMillis: 300000
+            # 配置一个连接在池中最大生存的时间，单位是毫秒
+            maxEvictableIdleTimeMillis: 900000
+            # 配置检测连接是否有效
+            validationQuery: SELECT 1 FROM DUAL
+            testWhileIdle: true
+            testOnBorrow: false
+            testOnReturn: false
+            webStatFilter:
+                enabled: true
+            statViewServlet:
+                enabled: true
+                # 设置白名单，不填则允许所有访问
+                allow:
+                url-pattern: /druid/*
+                # 控制台管理用户名和密码
+                login-username: ruoyi
+                login-password: 123456
+            filter:
+                stat:
+                    enabled: true
+                    # 慢SQL记录
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+    # redis 配置
+    redis:
+        # 地址
+        host: localhost
+        # 端口，默认为6379
+        port: 6379
+        # 数据库索引
+        database: 0
+        # 密码
+        password:
+        # 连接超时时间
+        timeout: 10s
+        lettuce:
+            pool:
+                # 连接池中的最小空闲连接
+                min-idle: 0
+                # 连接池中的最大空闲连接
+                max-idle: 8
+                # 连接池的最大数据库连接数
+                max-active: 8
+                # #连接池最大阻塞等待时间（使用负值表示没有限制）
+                max-wait: -1ms
+
+        #rabbitmq 配置
+    rabbitmq:
+        host: 113.207.73.200
+        username: guest
+        password: guest
+        #虚拟主机
+        virtual-host: /
+        publisher-returns: true
+        #端口
+        port: 5672
+        listener:
+            simple:
+                #消费者最小数量
+#                concurrency: 10
+                #消费者最大数量
+#                max-concurrency: 10
+                #限流
+                acknowledge-mode: manual
+                #限制消费者，每次只能处理一条消息，处理完才能继续下一条消息
+                prefetch: 1
+                #启动时是否默认启动容器，默认为 true
+#                auto-startup: true
+                #被拒绝时重新进入队列的
+#                default-requeue-rejected: true
+
+        template:
+            retry:
+                #启用消息重试机制，默认为 false
+                enabled: true
+                #初始重试间隔时间
+                initial-interval: 1000ms
+                #重试最大次数，默认为 3 次
+                max-attempts: 3
+                #重试最大时间间隔，默认 10000ms
+                max-interval: 10000ms
+                #重试的间隔乘数，
+                #配置 2 的话，第一次等 1s，第二次等 2s，第三次等 4s
+                multiplier: 1
+
+                  #在 RabbitMQ 中，initial-interval 和 max-interval 是用于指定消息重试机制的两个参数，
+                  #它们的区别如下：
+                  #1. initial-interval（初始间隔时间）：表示第一次重试的时间间隔，也就是在消息第一次处
+                  #理失败后，等待多长时间再尝试重新发送消息。这个参数的默认值是 1 秒。
+                  #2.max-interval（最大间隔时间）：表示重试过程中的最大时间间隔，也就是每次重试时，
+                #最长等待多长时间再尝试重新发送消息。这个参数的默认值是 10 秒。
+
+logging:
+    config: classpath:logback-dev.xml
+ai:
+    ip: "http://113.207.73.200:7860"
+    userName: "huahe"
+    passWord: "huaheshuzhi1111"
+    text2ImageInterface: "/sdapi/v1/txt2img"
+    image2ImageInterface: "/sdapi/v1/img2img"
+    basePath: "D:/garment/uploadPath/upload/2023/10/15/"
+    insertPath: "http://192.168.1.37:8080/profile/upload/2023/10/15/"
+oss:
+    end-point: oss-changshouyun.sangforcloud.com:12000
+    access-key-id: GM7UC0M5DKPJSGD3I9VK
+    access-key-secret: CS1dCClxIB5A05e7pqRczHMa5C1LfYZODFgNILsB
+    bucket-name: ai_oss

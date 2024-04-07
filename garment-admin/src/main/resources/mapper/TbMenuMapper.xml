@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.garment.web.mapper.TbMenuMapper">
+
+    <resultMap type="TbMenu" id="TbMenuResult">
+        <result property="id"    column="id"    />
+        <result property="label"    column="label"    />
+        <result property="labelValue"    column="label_value"    />
+        <result property="type"    column="type"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+
+    <resultMap type="com.garment.web.vo.MenuVO" id="menuResult">
+        <result property="id"    column="id"    />
+        <result property="label"    column="label"    />
+        <result property="labelValue"    column="label_value"    />
+        <result property="type"    column="type"    />
+        <result property="parentId"    column="parent_id"    />
+        <collection property="twoLevelList" select="selectLevelByParentId"
+                    ofType="com.garment.web.vo.MenuVO" column="id">
+        </collection>
+    </resultMap>
+
+
+
+    <sql id="selectTbMenuVo">
+        select id, label, label_value, type, parent_id, create_time, update_time from tb_menu
+    </sql>
+
+    <select id="selectTbMenuList" parameterType="TbMenu" resultMap="TbMenuResult">
+        <include refid="selectTbMenuVo"/>
+        <where>
+            <if test="label != null  and label != ''"> and label = #{label}</if>
+            <if test="labelValue != null  and labelValue != ''"> and label_value = #{labelValue}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+        </where>
+    </select>
+
+    <select id="selectTbMenuById" parameterType="Long" resultMap="TbMenuResult">
+        <include refid="selectTbMenuVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTbMenu" parameterType="TbMenu" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="label != null">label,</if>
+            <if test="labelValue != null">label_value,</if>
+            <if test="type != null">type,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="label != null">#{label},</if>
+            <if test="labelValue != null">#{labelValue},</if>
+            <if test="type != null">#{type},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbMenu" parameterType="TbMenu">
+        update tb_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="label != null">label = #{label},</if>
+            <if test="labelValue != null">label_value = #{labelValue},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbMenuById" parameterType="Long">
+        delete from tb_menu where id = #{id}
+    </delete>
+
+    <delete id="deleteTbMenuByIds" parameterType="String">
+        delete from tb_menu where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectLevelByParentId" parameterType="Long" resultMap="menuResult">
+        select
+           id,
+           label,
+           label_value,
+           type,
+           parent_id
+        from tb_menu
+        where parent_id = #{id};
+    </select>
+
+    <select id="getMenuList" parameterType="Long" resultMap="menuResult">
+        select
+            id,
+            label,
+            label_value,
+            type,
+            parent_id
+        from tb_menu
+        where type = 1 ;
+    </select>
+    <!--    getMenuList-->
+
+
+</mapper>

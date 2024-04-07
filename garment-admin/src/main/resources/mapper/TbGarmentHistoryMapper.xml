@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.garment.web.mapper.TbGarmentHistoryMapper">
+
+    <resultMap type="TbGarmentHistory" id="TbGarmentHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="context"    column="context"    />
+        <result property="translateContext"    column="translate_context"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="compressUrl"    column="compress_url"    />
+        <result property="updateFlag"    column="update_flag"    />
+        <result property="compressFlag"    column="compress_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbGarmentHistoryVo">
+        select id, context, translate_context, img_url,compress_url,update_flag,compress_flag, create_time, update_time from tb_garment_history
+    </sql>
+
+    <select id="selectTbGarmentHistoryList" parameterType="TbGarmentHistory" resultMap="TbGarmentHistoryResult">
+        <include refid="selectTbGarmentHistoryVo"/>
+        <where>
+            <if test="context != null  and context != ''"> and context = #{context}</if>
+            <if test="translateContext != null  and translateContext != ''"> and translate_context = #{translateContext}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
+            <if test="updateFlag != null  and updateFlag != ''"> and update_flag = #{updateFlag}</if>
+            <if test="compressFlag != null  and compressFlag != ''"> and compress_flag = #{compressFlag}</if>
+        </where>
+    </select>
+
+
+    <select id="getHistoryList" parameterType="Long" resultType="com.garment.web.vo.HistoryVO">
+       select
+           id,
+           context,
+           translate_context as translateContext,
+           img_url as imgUrl,
+           compress_url as compressUrl
+           from tb_garment_history  order by  id desc
+    </select>
+
+    <select id="selectTbGarmentHistoryById" parameterType="Long" resultMap="TbGarmentHistoryResult">
+        <include refid="selectTbGarmentHistoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTbGarmentHistory" parameterType="TbGarmentHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_garment_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="context != null">context,</if>
+            <if test="translateContext != null">translate_context,</if>
+            <if test="imgUrl != null">img_url,</if>
+            <if test="compressUrl != null">compress_url,</if>
+            <if test="updateFlag != null">update_flag,</if>
+            <if test="compressFlag != null">compress_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="context != null">#{context},</if>
+            <if test="translateContext != null">#{translateContext},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+            <if test="compressUrl != null">#{compressUrl},</if>
+            <if test="updateFlag != null">#{updateFlag},</if>
+            <if test="compressFlag != null">#{compressFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbGarmentHistory" parameterType="TbGarmentHistory">
+        update tb_garment_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="context != null">context = #{context},</if>
+            <if test="translateContext != null">translate_context = #{translateContext},</if>
+            <if test="imgUrl != null">img_url = #{imgUrl},</if>
+            <if test="compressUrl != null">compress_url = #{compressUrl},</if>
+            <if test="updateFlag != null">update_flag = #{updateFlag},</if>
+            <if test="compressFlag != null">compress_flag = #{compressFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbGarmentHistoryById" parameterType="Long">
+        delete from tb_garment_history where id = #{id}
+    </delete>
+
+    <delete id="deleteTbGarmentHistoryByIds" parameterType="String">
+        delete from tb_garment_history where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+
+
+
+</mapper>

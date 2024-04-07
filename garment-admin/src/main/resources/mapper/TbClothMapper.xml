@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.garment.web.mapper.TbClothMapper">
+
+    <resultMap type="TbCloth" id="TbClothResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="fabric"    column="fabric"    />
+        <result property="special"    column="special"    />
+        <result property="characteristic"    column="characteristic"    />
+        <result property="particulars"    column="particulars"    />
+        <result property="firstImg"    column="first_img"    />
+        <result property="wholeBodyImg"    column="whole_body_img"    />
+        <result property="realImg"    column="real_img"    />
+        <result property="onePoenTitle"    column="one_poen_title"    />
+        <result property="onePoen"    column="one_poen"    />
+        <result property="twoPoemTitle"    column="two_poem_title"    />
+        <result property="twoPoem"    column="two_poem"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTbClothVo">
+        select id, name,special, particulars,fabric,characteristic, first_img, whole_body_img, real_img, one_poen_title, one_poen, two_poem_title, two_poem, create_time, update_time from tb_cloth
+    </sql>
+
+    <select id="selectTbClothList" parameterType="TbCloth" resultMap="TbClothResult">
+        <include refid="selectTbClothVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="fabric != null  and fabric != ''"> and fabric = #{fabric}</if>
+            <if test="characteristic != null  and characteristic != ''"> and characteristic = #{characteristic}</if>
+            <if test="particulars != null  and particulars != ''"> and particulars = #{particulars}</if>
+            <if test="firstImg != null  and firstImg != ''"> and first_img = #{firstImg}</if>
+            <if test="wholeBodyImg != null  and wholeBodyImg != ''"> and whole_body_img = #{wholeBodyImg}</if>
+            <if test="realImg != null  and realImg != ''"> and real_img = #{realImg}</if>
+            <if test="onePoenTitle != null  and onePoenTitle != ''"> and one_poen_title = #{onePoenTitle}</if>
+            <if test="onePoen != null  and onePoen != ''"> and one_poen = #{onePoen}</if>
+            <if test="twoPoemTitle != null  and twoPoemTitle != ''"> and two_poem_title = #{twoPoemTitle}</if>
+            <if test="twoPoem != null  and twoPoem != ''"> and two_poem = #{twoPoem}</if>
+        </where>
+    </select>
+
+    <select id="selectTbClothById" parameterType="Long" resultMap="TbClothResult">
+        <include refid="selectTbClothVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTbCloth" parameterType="TbCloth" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_cloth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="fabric != null">fabric,</if>
+            <if test="special != null">special,</if>
+            <if test="characteristic != null">characteristic,</if>
+            <if test="particulars != null">particulars,</if>
+            <if test="firstImg != null">first_img,</if>
+            <if test="wholeBodyImg != null">whole_body_img,</if>
+            <if test="realImg != null">real_img,</if>
+            <if test="onePoenTitle != null and onePoenTitle != ''">one_poen_title,</if>
+            <if test="onePoen != null">one_poen,</if>
+            <if test="twoPoemTitle != null">two_poem_title,</if>
+            <if test="twoPoem != null">two_poem,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="fabric != null">#{fabric},</if>
+            <if test="special != null">#{special},</if>
+            <if test="characteristic != null">#{characteristic},</if>
+            <if test="particulars != null">#{particulars},</if>
+            <if test="firstImg != null">#{firstImg},</if>
+            <if test="wholeBodyImg != null">#{wholeBodyImg},</if>
+            <if test="realImg != null">#{realImg},</if>
+            <if test="onePoenTitle != null and onePoenTitle != ''">#{onePoenTitle},</if>
+            <if test="onePoen != null">#{onePoen},</if>
+            <if test="twoPoemTitle != null">#{twoPoemTitle},</if>
+            <if test="twoPoem != null">#{twoPoem},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbCloth" parameterType="TbCloth">
+        update tb_cloth
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="fabric != null">fabric = #{fabric},</if>
+            <if test="special != null">special = #{special},</if>
+            <if test="characteristic != null">characteristic = #{characteristic},</if>
+            <if test="particulars != null">particulars = #{particulars},</if>
+            <if test="firstImg != null">first_img = #{firstImg},</if>
+            <if test="wholeBodyImg != null">whole_body_img = #{wholeBodyImg},</if>
+            <if test="realImg != null">real_img = #{realImg},</if>
+            <if test="onePoenTitle != null and onePoenTitle != ''">one_poen_title = #{onePoenTitle},</if>
+            <if test="onePoen != null">one_poen = #{onePoen},</if>
+            <if test="twoPoemTitle != null">two_poem_title = #{twoPoemTitle},</if>
+            <if test="twoPoem != null">two_poem = #{twoPoem},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbClothById" parameterType="Long">
+        delete from tb_cloth where id = #{id}
+    </delete>
+
+    <delete id="deleteTbClothByIds" parameterType="String">
+        delete from tb_cloth where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
